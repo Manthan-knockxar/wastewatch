@@ -1,8 +1,15 @@
 const Database = require('better-sqlite3');
 const path = require('path');
+const fs = require('fs');
 
 // Render persistent disk location
 const dataDir = process.env.RENDER ? '/opt/render/project/src/data' : __dirname;
+
+// Ensure directory exists
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
 const dbPath = path.join(dataDir, 'wastewatch.db');
 
 let db;
