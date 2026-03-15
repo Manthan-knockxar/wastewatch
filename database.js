@@ -1,22 +1,23 @@
-const sqlite3 = require('sqlite3').verbose();
-const { open } = require('sqlite');
+const Database = require('better-sqlite3');
 const path = require('path');
 
-// Render uses /opt/render/project/src/data for persistent disks
+// Render persistent disk location
 const dataDir = process.env.RENDER ? '/opt/render/project/src/data' : __dirname;
 const dbPath = path.join(dataDir, 'wastewatch.db');
 
-async function getDb() {
-  return open({
-    filename: dbPath,
-    driver: sqlite3.Database
-  });
+let db;
+
+function getDb() {
+  if (!db) {
+    db = new Database(dbPath);
+  }
+  return db;
 }
 
-async function initDb() {
-  const db = await getDb();
-  
-  await db.exec(`
+function initDb() {
+  const db = getDb();
+
+  db.exec(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE NOT NULL,
@@ -46,7 +47,7 @@ async function initDb() {
       FOREIGN KEY (user_id) REFERENCES users (id)
     );
   `);
-  
+
   return db;
 }
 
