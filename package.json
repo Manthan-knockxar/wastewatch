@@ -4,8 +4,7 @@
   "description": "WasteWatch EVS project",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "npm rebuild sqlite3"
+    "start": "node server.js"
   },
   "author": "Manthan",
   "license": "ISC",
@@ -15,7 +14,6 @@
     "better-sqlite3": "^12.8.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "sqlite": "^5.1.1"
+    "express": "^5.2.1"
   }
 }

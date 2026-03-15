@@ -14,18 +14,23 @@ app.use(cookieParser());
 app.use(express.static(__dirname));
 
 // Auth Middleware
-async function authenticate(req, res, next) {
+function authenticate(req, res, next) {
   const userId = req.cookies.user_id;
   if (!userId) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
-  const db = await getDb();
-  const user = await db.get('SELECT * FROM users WHERE id = ?', [userId]);
-  if (!user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+  try {
+    const db = getDb();
+    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(userId);
+    if (!user) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
   }
-  req.user = user;
-  next();
 }
 
 // Routes
@@ -33,17 +38,17 @@ app.post('/api/register', async (req, res) => {
   const { username, password, city } = req.body;
   if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
   
-  const db = await getDb();
-  const pwdHash = await bcrypt.hash(password, 10);
-  
   try {
-    const result = await db.run('INSERT INTO users (username, password_hash, city) VALUES (?, ?, ?)', [username, pwdHash, city]);
-    res.cookie('user_id', result.lastID, { httpOnly: true, secure: false }); 
-    res.json({ message: 'Registered successfully', user: { id: result.lastID, username, city } });
+    const db = getDb();
+    const pwdHash = await bcrypt.hash(password, 10);
+    const result = db.prepare('INSERT INTO users (username, password_hash, city) VALUES (?, ?, ?)').run(username, pwdHash, city);
+    res.cookie('user_id', result.lastInsertRowid, { httpOnly: true, secure: process.env.NODE_ENV === 'production' }); 
+    res.json({ message: 'Registered successfully', user: { id: result.lastInsertRowid, username, city } });
   } catch (err) {
-    if (err.message.includes('UNIQUE constraint failed')) {
+    if (err.message && err.message.includes('UNIQUE constraint failed')) {
       return res.status(400).json({ error: 'Username already exists' });
     }
+    console.error(err);
     res.status(500).json({ error: 'Database error' });
   }
 });
@@ -52,14 +57,19 @@ app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ error: 'Missing fields' });
   
-  const db = await getDb();
-  const user = await db.get('SELECT * FROM users WHERE username = ?', [username]);
-  if (!user || !(await bcrypt.compare(password, user.password_hash))) {
-    return res.status(401).json({ error: 'Invalid credentials' });
+  try {
+    const db = getDb();
+    const user = db.prepare('SELECT * FROM users WHERE username = ?').get(username);
+    if (!user || !(await bcrypt.compare(password, user.password_hash))) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+    
+    res.cookie('user_id', user.id, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+    res.json({ message: 'Logged in successfully', user: { id: user.id, username: user.username, city: user.city } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
   }
-  
-  res.cookie('user_id', user.id, { httpOnly: true });
-  res.json({ message: 'Logged in successfully', user: { id: user.id, username: user.username, city: user.city } });
 });
 
 app.post('/api/logout', (req, res) => {
@@ -71,50 +81,74 @@ app.get('/api/me', authenticate, (req, res) => {
   res.json({ user: { id: req.user.id, username: req.user.username, city: req.user.city } });
 });
 
-app.get('/api/waste', authenticate, async (req, res) => {
-  const db = await getDb();
-  const logs = await db.all('SELECT * FROM waste_logs WHERE user_id = ? ORDER BY date DESC', [req.user.id]);
-  res.json({ logs });
-});
-
-app.post('/api/waste', authenticate, async (req, res) => {
-  const { date, orders, packaging_type, waste_kg } = req.body;
-  const db = await getDb();
-  await db.run(
-    'INSERT INTO waste_logs (user_id, date, orders, packaging_type, waste_kg) VALUES (?, ?, ?, ?, ?)',
-    [req.user.id, date, orders, packaging_type, waste_kg]
-  );
-  res.json({ message: 'Logged waste' });
-});
-
-app.delete('/api/waste/:id', authenticate, async (req, res) => {
-  const db = await getDb();
-  await db.run('DELETE FROM waste_logs WHERE id = ? AND user_id = ?', [req.params.id, req.user.id]);
-  res.json({ message: 'Deleted' });
-});
-
-app.get('/api/pledges', authenticate, async (req, res) => {
-  const db = await getDb();
-  const pledges = await db.all('SELECT * FROM pledges WHERE user_id = ?', [req.user.id]);
-  res.json({ pledges });
-});
-
-app.post('/api/pledges', authenticate, async (req, res) => {
-  const { pledge_id, isActive, rank, impact } = req.body;
-  const db = await getDb();
-  if (isActive) {
-    await db.run(
-      'INSERT OR REPLACE INTO pledges (user_id, pledge_id, rank, impact) VALUES (?, ?, ?, ?)',
-      [req.user.id, pledge_id, rank || 1, impact || 0]
-    );
-  } else {
-    await db.run('DELETE FROM pledges WHERE user_id = ? AND pledge_id = ?', [req.user.id, pledge_id]);
+app.get('/api/waste', authenticate, (req, res) => {
+  try {
+    const db = getDb();
+    const logs = db.prepare('SELECT * FROM waste_logs WHERE user_id = ? ORDER BY date DESC').all(req.user.id);
+    res.json({ logs });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
   }
-  res.json({ message: 'Pledge updated' });
 });
 
-initDb().then(() => {
+app.post('/api/waste', authenticate, (req, res) => {
+  const { date, orders, packaging_type, waste_kg } = req.body;
+  try {
+    const db = getDb();
+    db.prepare('INSERT INTO waste_logs (user_id, date, orders, packaging_type, waste_kg) VALUES (?, ?, ?, ?, ?)')
+      .run(req.user.id, date, orders, packaging_type, waste_kg);
+    res.json({ message: 'Logged waste' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+app.delete('/api/waste/:id', authenticate, (req, res) => {
+  try {
+    const db = getDb();
+    db.prepare('DELETE FROM waste_logs WHERE id = ? AND user_id = ?').run(req.params.id, req.user.id);
+    res.json({ message: 'Deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+app.get('/api/pledges', authenticate, (req, res) => {
+  try {
+    const db = getDb();
+    const pledges = db.prepare('SELECT * FROM pledges WHERE user_id = ?').all(req.user.id);
+    res.json({ pledges });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+app.post('/api/pledges', authenticate, (req, res) => {
+  const { pledge_id, isActive, rank, impact } = req.body;
+  try {
+    const db = getDb();
+    if (isActive) {
+      db.prepare('INSERT OR REPLACE INTO pledges (user_id, pledge_id, rank, impact) VALUES (?, ?, ?, ?)')
+        .run(req.user.id, pledge_id, rank || 1, impact || 0);
+    } else {
+      db.prepare('DELETE FROM pledges WHERE user_id = ? AND pledge_id = ?').run(req.user.id, pledge_id);
+    }
+    res.json({ message: 'Pledge updated' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+try {
+  initDb();
   app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);
   });
-}).catch(console.error);
+} catch (error) {
+  console.error('Failed to initialize database:', error);
+}

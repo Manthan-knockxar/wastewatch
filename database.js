@@ -2,8 +2,8 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
-// Render persistent disk location
-const dataDir = process.env.RENDER ? '/opt/render/project/src/data' : __dirname;
+// Render ephemeral disk location (no persistent disk)
+const dataDir = process.env.DATA_DIR || __dirname;
 
 // Ensure directory exists
 if (!fs.existsSync(dataDir)) {
