@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WasteWatch India — Food Delivery & Solid Waste</title>
+  <meta name="description" content="Explore how India's booming food delivery industry contributes to solid waste. Visualize data, predict future waste, and discover actionable solutions." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-brand">
+        <span class="brand-icon">♻</span>
+        <span class="brand-text">WASTE<span class="accent">WATCH</span></span>
+      </a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#problem" class="nav-link">The Problem</a></li>
+        <li><a href="#data" class="nav-link">Data Insights</a></li>
+        <li><a href="#predictor" class="nav-link">Predictor</a></li>
+        <li><a href="#solutions" class="nav-link">Solutions</a></li>
+        <li><a href="#organizations" class="nav-link">Take Action</a></li>
+        <li><a href="#" class="nav-link nav-auth-btn" id="nav-auth-btn">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ HERO ═══════════════ -->
+  <section id="hero">
+    <div class="bg-deco-text" aria-hidden="true">CRISIS</div>
+    <div class="hero-noise"></div>
+    <div class="hero-diagonal"></div>
+    <div class="hero-content">
+      <p class="hero-tagline">INDIA'S GROWING CRISIS</p>
+      <h1 class="hero-title">
+        Food Delivery's<br />
+        <span class="title-accent">Waste Problem</span>
+      </h1>
+      <p class="hero-desc">Every order leaves a trail. Explore the data, predict the future, and discover how we can turn the tide on packaging waste.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="stat-number" data-target="22000">0</span>
+          <span class="stat-label">Tonnes of plastic waste<br/>per day in India</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-number" data-target="75" data-suffix="%">0</span>
+          <span class="stat-label">Packaging from<br/>single-use plastic</span>
+        </div>
+        <div class="hero-stat">
+          <span class="stat-number" data-target="35" data-suffix="%">0</span>
+          <span class="stat-label">Annual growth in<br/>food delivery orders</span>
+        </div>
+      </div>
+      <a href="#problem" class="hero-cta">Explore the Data <span class="cta-arrow">↓</span></a>
+    </div>
+  </section>
+
+  <!-- ═══════════════ SECTION SLASH DIVIDER ═══════════════ -->
+  <div class="section-slash slash-hero"></div>
+
+  <!-- ═══════════════ THE PROBLEM ═══════════════ -->
+  <section id="problem" class="section">
+    <div class="bg-deco-section" aria-hidden="true">WASTE</div>
+    <div class="section-header">
+      <span class="section-tag">01</span>
+      <h2 class="section-title">THE PROBLEM</h2>
+      <p class="section-subtitle">India's food delivery boom has an invisible cost — millions of tonnes of single-use packaging flooding landfills every year.</p>
+    </div>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal" data-delay="0">
+        <div class="card-accent-line"></div>
+        <div class="card-icon">🍱</div>
+        <h3 class="card-value"><span class="counter" data-target="2000000">0</span>+</h3>
+        <p class="card-title">Daily Food Delivery Orders</p>
+        <p class="card-desc">Platforms like Zomato & Swiggy deliver over 2 million orders daily, each wrapped in layers of packaging.</p>
+      </div>
+      <div class="problem-card reveal" data-delay="100">
+        <div class="card-accent-line cyan"></div>
+        <div class="card-icon">🗑️</div>
+        <h3 class="card-value"><span class="counter" data-target="9400">0</span> T</h3>
+        <p class="card-title">Monthly Packaging Waste</p>
+        <p class="card-desc">An estimated 9,400 tonnes of packaging waste is generated each month from food delivery alone.</p>
+      </div>
+      <div class="problem-card reveal" data-delay="200">
+        <div class="card-accent-line"></div>
+        <div class="card-icon">♻️</div>
+        <h3 class="card-value"><span class="counter" data-target="15">0</span>%</h3>
+        <p class="card-title">Recycling Rate</p>
+        <p class="card-desc">Only 15% of food delivery packaging is effectively recycled. The rest ends up in landfills or water bodies.</p>
+      </div>
+      <div class="problem-card reveal" data-delay="300">
+        <div class="card-accent-line cyan"></div>
+        <div class="card-icon">🌊</div>
+        <h3 class="card-value"><span class="counter" data-target="600000">0</span> T</h3>
+        <p class="card-title">Ocean-Bound Plastic/Year</p>
+        <p class="card-desc">India is among the top contributors of ocean-bound plastic, much of it from food and FMCG packaging.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-slash slash-problem"></div>
+
+  <!-- ═══════════════ DATA INSIGHTS ═══════════════ -->
+  <section id="data" class="section section-dark">
+    <div class="bg-deco-section" aria-hidden="true">DATA</div>
+    <div class="section-header">
+      <span class="section-tag">02</span>
+      <h2 class="section-title">DATA INSIGHTS</h2>
+      <p class="section-subtitle">Visualizing the scale and composition of food delivery waste in India.</p>
+    </div>
+
+    <div class="charts-grid">
+      <div class="chart-card reveal">
+        <h3 class="chart-title">Waste by Material Type</h3>
+        <p class="chart-desc">Breakdown of food delivery packaging waste by material category (tonnes/month).</p>
+        <div class="chart-container">
+          <canvas id="chart-bar"></canvas>
+        </div>
+      </div>
+      <div class="chart-card reveal">
+        <h3 class="chart-title">Packaging Composition</h3>
+        <p class="chart-desc">Share of each material in total food delivery packaging waste.</p>
+        <div class="chart-container chart-container-sm">
+          <canvas id="chart-doughnut"></canvas>
+        </div>
+      </div>
+      <div class="chart-card chart-card-full reveal">
+        <h3 class="chart-title">Year-over-Year Growth</h3>
+        <p class="chart-desc">Estimated food delivery packaging waste in India (2018–2025), in thousand tonnes/year.</p>
+        <div class="chart-container">
+          <canvas id="chart-line"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-slash slash-data"></div>
+
+  <!-- ═══════════════ WASTE PREDICTOR ═══════════════ -->
+  <section id="predictor" class="section">
+    <div class="section-header">
+      <span class="section-tag">03</span>
+      <h2 class="section-title">WASTE PREDICTOR</h2>
+      <p class="section-subtitle">Adjust the sliders to model how different factors affect projected food delivery waste over the next decade.</p>
+    </div>
+
+    <div class="predictor-layout">
+      <div class="predictor-controls reveal">
+        <div class="slider-group">
+          <label class="slider-label">
+            <span class="slider-name">Daily Orders (millions)</span>
+            <span class="slider-value" id="val-orders">2.0</span>
+          </label>
+          <input type="range" id="slider-orders" min="0.5" max="10" step="0.1" value="2.0" class="styled-slider" />
+        </div>
+        <div class="slider-group">
+          <label class="slider-label">
+            <span class="slider-name">Avg Packaging Weight (grams)</span>
+            <span class="slider-value" id="val-weight">150</span>
+          </label>
+          <input type="range" id="slider-weight" min="50" max="500" step="5" value="150" class="styled-slider" />
+        </div>
+        <div class="slider-group">
+          <label class="slider-label">
+            <span class="slider-name">Annual Growth Rate (%)</span>
+            <span class="slider-value" id="val-growth">25</span>
+          </label>
+          <input type="range" id="slider-growth" min="0" max="60" step="1" value="25" class="styled-slider" />
+        </div>
+        <div class="slider-group">
+          <label class="slider-label">
+            <span class="slider-name">Recycling Rate (%)</span>
+            <span class="slider-value" id="val-recycle">15</span>
+          </label>
+          <input type="range" id="slider-recycle" min="0" max="90" step="1" value="15" class="styled-slider" />
+        </div>
+        <div class="predictor-summary" id="predictor-summary">
+          <p>By <strong>2035</strong>, projected annual unrecycled waste:</p>
+          <span class="summary-number" id="summary-number">—</span>
+        </div>
+      </div>
+      <div class="predictor-chart-wrap reveal">
+        <div class="chart-container">
+          <canvas id="chart-predictor"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-slash slash-predictor"></div>
+
+  <!-- ═══════════════ SOLUTIONS ═══════════════ -->
+  <section id="solutions" class="section section-dark">
+    <div class="section-header">
+      <span class="section-tag">04</span>
+      <h2 class="section-title">SOLUTIONS</h2>
+      <p class="section-subtitle">Actionable strategies to reduce food delivery waste at every level.</p>
+    </div>
+
+    <div class="solutions-grid">
+      <div class="solution-card reveal" data-delay="0">
+        <div class="sol-icon">🌿</div>
+        <h3 class="sol-title">Biodegradable Packaging</h3>
+        <p class="sol-desc">Switch to plant-based, compostable containers made from bagasse, cornstarch, or bamboo fibre. Already adopted by brands like Zomato's "Pure Veg" fleet.</p>
+        <span class="sol-tag">Industry</span>
+      </div>
+      <div class="solution-card reveal" data-delay="100">
+        <div class="sol-icon">🔄</div>
+        <h3 class="sol-title">Reusable Container Programs</h3>
+        <p class="sol-desc">Deposit-based reusable container systems where customers return packaging on next delivery. Pilots in Bengaluru have shown 40% waste reduction.</p>
+        <span class="sol-tag">Innovation</span>
+      </div>
+      <div class="solution-card reveal" data-delay="200">
+        <div class="sol-icon">📜</div>
+        <h3 class="sol-title">Extended Producer Responsibility</h3>
+        <p class="sol-desc">Mandate platforms to fund collection & recycling of packaging waste under India's EPR framework and the Plastic Waste Management Rules, 2016.</p>
+        <span class="sol-tag">Policy</span>
+      </div>
+      <div class="solution-card reveal" data-delay="300">
+        <div class="sol-icon">🙋</div>
+        <h3 class="sol-title">Consumer Opt-Out for Cutlery</h3>
+        <p class="sol-desc">A simple checkbox: "I don't need cutlery." Zomato & Swiggy's opt-out feature has already prevented 2.2 billion+ pieces of cutlery waste.</p>
+        <span class="sol-tag">Consumer</span>
+      </div>
+      <div class="solution-card reveal" data-delay="400">
+        <div class="sol-icon">🏭</div>
+        <h3 class="sol-title">Waste-to-Energy Conversion</h3>
+        <p class="sol-desc">Non-recyclable packaging can be processed in waste-to-energy plants. India targets 100+ WtE plants by 2030 under the Swachh Bharat Mission.</p>
+        <span class="sol-tag">Technology</span>
+      </div>
+      <div class="solution-card reveal" data-delay="500">
+        <div class="sol-icon">📢</div>
+        <h3 class="sol-title">Awareness Campaigns</h3>
+        <p class="sol-desc">Educate consumers on proper waste segregation and the environmental impact of food delivery packaging through in-app nudges and social campaigns.</p>
+        <span class="sol-tag">Education</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-slash slash-solutions"></div>
+
+  <!-- ═══════════════ ORGANIZATIONS ═══════════════ -->
+  <section id="organizations" class="section">
+    <div class="section-header">
+      <span class="section-tag">05</span>
+      <h2 class="section-title">TAKE ACTION</h2>
+      <p class="section-subtitle">Organizations leading the fight against packaging waste in India. Support, volunteer, or learn more.</p>
+    </div>
+
+    <div class="org-grid">
+      <a href="https://swachhbharatmission.gov.in/" target="_blank" rel="noopener" class="org-card reveal" data-delay="0">
+        <div class="org-badge">GOV</div>
+        <h3 class="org-name">Swachh Bharat Mission</h3>
+        <p class="org-desc">India's national cleanliness & waste management program targeting zero landfillable waste.</p>
+        <span class="org-link-text">Visit Website →</span>
+      </a>
+      <a href="https://earth5r.org/" target="_blank" rel="noopener" class="org-card reveal" data-delay="100">
+        <div class="org-badge org-badge-cyan">NGO</div>
+        <h3 class="org-name">Earth5R</h3>
+        <p class="org-desc">Grassroots environmental action through circular economy projects and community-led waste management.</p>
+        <span class="org-link-text">Visit Website →</span>
+      </a>
+      <a href="https://www.chintan-india.org/" target="_blank" rel="noopener" class="org-card reveal" data-delay="200">
+        <div class="org-badge">NGO</div>
+        <h3 class="org-name">Chintan Environmental</h3>
+        <p class="org-desc">Works with waste pickers & communities to build inclusive, sustainable waste management systems.</p>
+        <span class="org-link-text">Visit Website →</span>
+      </a>
+      <a href="https://www.undp.org/india" target="_blank" rel="noopener" class="org-card reveal" data-delay="300">
+        <div class="org-badge org-badge-cyan">INTL</div>
+        <h3 class="org-name">UNDP India</h3>
+        <p class="org-desc">Supports India's plastic waste management and promotes circular economy solutions nationwide.</p>
+        <span class="org-link-text">Visit Website →</span>
+      </a>
+      <a href="https://www.wwfindia.org/" target="_blank" rel="noopener" class="org-card reveal" data-delay="400">
+        <div class="org-badge">INTL</div>
+        <h3 class="org-name">WWF India</h3>
+        <p class="org-desc">Campaigns against single-use plastics and promotes sustainable consumption practices.</p>
+        <span class="org-link-text">Visit Website →</span>
+      </a>
+      <a href="https://hasiru-dala.org/" target="_blank" rel="noopener" class="org-card reveal" data-delay="500">
+        <div class="org-badge org-badge-cyan">NGO</div>
+        <h3 class="org-name">Hasiru Dala</h3>
+        <p class="org-desc">Bengaluru-based org empowering waste pickers and building decentralized waste processing.</p>
+        <span class="org-link-text">Visit Website →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ═══════════════ FOOTER ═══════════════ -->
+  <footer id="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="brand-icon">♻</span>
+        <span class="brand-text">WASTE<span class="accent">WATCH</span></span>
+      </div>
+      <p class="footer-note">Data sourced from CSE India, CPCB Annual Reports, FICCI, and published research. Figures are estimates for illustrative purposes.</p>
+      <div class="footer-links">
+        <a href="https://cpcb.nic.in/" target="_blank" rel="noopener">CPCB</a>
+        <a href="https://www.cseindia.org/" target="_blank" rel="noopener">CSE India</a>
+        <a href="https://ficci.in/" target="_blank" rel="noopener">FICCI</a>
+      </div>
+      <p class="footer-copy">© 2026 WasteWatch — Built for awareness, not profit.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

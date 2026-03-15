@@ -1,0 +1,300 @@
+/* =====================================================
+   WASTEWATCH — Login Page Styles
+   Metaphor: ReFantazio-inspired authentication
+   ===================================================== */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:#0a0a0f;
+  color:#e8e6e1;
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+
+:root{
+  --crimson:#c9243f;
+  --crimson-glow:#e8304a;
+  --cyan:#0ff5e5;
+  --cyan-dim:#0bb8ac;
+  --gold:#f0c940;
+  --bg-deep:#0a0a0f;
+  --bg-card:#12121a;
+  --surface:#1e1e2a;
+  --text-primary:#e8e6e1;
+  --text-dim:#8a8a9a;
+  --border:#2a2a3a;
+  --font-display:'Playfair Display',Georgia,serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --transition:0.35s cubic-bezier(.4,0,.2,1);
+}
+
+::selection{background:var(--crimson);color:#fff}
+
+/* ── Background Layers ─────────────────────────── */
+.bg-image{
+  position:fixed;inset:0;z-index:0;
+  background:url('login-bg.png') center/cover no-repeat;
+  opacity:.1;
+  filter:saturate(0.6) brightness(0.7);
+}
+.bg-overlay{
+  position:fixed;inset:0;z-index:1;
+  background:
+    radial-gradient(ellipse at 20% 50%,rgba(201,36,63,.1) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 30%,rgba(15,245,229,.06) 0%,transparent 40%),
+    linear-gradient(180deg,rgba(10,10,15,.6) 0%,rgba(10,10,15,.95) 100%);
+}
+.bg-noise{
+  position:fixed;inset:0;z-index:2;
+  opacity:.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px;
+  pointer-events:none;
+}
+.bg-scanlines{
+  position:fixed;inset:0;z-index:3;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,255,255,.008) 2px,rgba(255,255,255,.008) 4px);
+  pointer-events:none;
+}
+
+/* ── Decorative Background Text ────────────────── */
+.bg-deco-text{
+  position:fixed;z-index:2;
+  font-family:var(--font-display);
+  font-size:clamp(6rem,14vw,12rem);
+  font-weight:900;
+  color:rgba(255,255,255,.022);
+  text-transform:uppercase;
+  white-space:nowrap;
+  pointer-events:none;
+  user-select:none;
+  top:10%;left:-5%;
+  transform:rotate(-8deg);
+  letter-spacing:0.05em;
+}
+.bg-deco-text-2{
+  top:auto;bottom:8%;left:auto;right:-5%;
+  transform:rotate(5deg);
+  font-size:clamp(5rem,11vw,9rem);
+  color:rgba(201,36,63,.03);
+}
+
+/* ── Ink Splatter ──────────────────────────────── */
+.ink-splat{
+  position:fixed;z-index:2;pointer-events:none;
+  border-radius:50%;
+  filter:blur(60px);
+}
+.ink-splat-1{
+  width:400px;height:400px;
+  background:radial-gradient(circle,rgba(201,36,63,.08),transparent 70%);
+  top:-100px;right:-100px;
+}
+.ink-splat-2{
+  width:300px;height:300px;
+  background:radial-gradient(circle,rgba(15,245,229,.05),transparent 70%);
+  bottom:-80px;left:-80px;
+}
+
+/* ── Main Layout ───────────────────────────────── */
+.login-main{
+  position:relative;z-index:10;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:2rem;
+}
+
+/* ── Brand ─────────────────────────────────────── */
+.login-brand{
+  display:flex;align-items:center;gap:.5rem;
+  font-weight:700;font-size:1.3rem;letter-spacing:2px;
+  margin-bottom:2.5rem;text-decoration:none;color:var(--text-primary);
+  transition:transform var(--transition);
+}
+.login-brand:hover{transform:scale(1.05)}
+.brand-icon{font-size:1.5rem}
+.brand-text{font-family:var(--font-body);text-transform:uppercase}
+.accent{color:var(--crimson)}
+
+/* ── Auth Card ─────────────────────────────────── */
+.auth-card{
+  width:100%;max-width:420px;
+  background:rgba(18,18,26,.85);
+  backdrop-filter:blur(20px);
+  border:1px solid var(--border);
+  padding:0 2.5rem 2.5rem;
+  position:relative;
+  clip-path:polygon(0 0,calc(100% - 24px) 0,100% 24px,100% 100%,24px 100%,0 calc(100% - 24px));
+  animation:cardSlideIn .6s cubic-bezier(.16,1,.3,1) both;
+}
+.card-accent-top{
+  height:3px;
+  background:linear-gradient(90deg,var(--crimson),var(--cyan),var(--crimson));
+  margin:0 -2.5rem;
+  margin-bottom:2rem;
+}
+
+@keyframes cardSlideIn{
+  from{opacity:0;transform:translateY(30px) rotate(-1deg)}
+  to{opacity:1;transform:translateY(0) rotate(0)}
+}
+
+/* Shake animation for errors */
+.auth-card.shake{
+  animation:cardShake .4s ease;
+}
+@keyframes cardShake{
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-10px) rotate(-0.5deg)}
+  40%{transform:translateX(10px) rotate(0.5deg)}
+  60%{transform:translateX(-6px) rotate(-0.3deg)}
+  80%{transform:translateX(6px) rotate(0.3deg)}
+}
+
+/* Success animation */
+.auth-card.success{
+  animation:cardSuccess .5s ease forwards;
+}
+@keyframes cardSuccess{
+  to{transform:scale(0.95) translateY(-10px);opacity:0;filter:blur(4px)}
+}
+
+/* ── Tabs ──────────────────────────────────────── */
+.auth-tabs{
+  display:flex;gap:0;margin-bottom:2rem;
+  border-bottom:1px solid var(--border);
+}
+.auth-tab{
+  flex:1;padding:.8rem;
+  background:none;border:none;color:var(--text-dim);
+  font-family:var(--font-body);font-size:.8rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  cursor:pointer;position:relative;
+  transition:color var(--transition);
+}
+.auth-tab:hover{color:var(--text-primary)}
+.auth-tab.active{color:var(--crimson)}
+.auth-tab.active::after{
+  content:'';position:absolute;bottom:-1px;left:0;right:0;
+  height:2px;background:var(--crimson);
+}
+.tab-slash{
+  color:var(--cyan);opacity:.4;margin-right:.3rem;
+  font-family:monospace;
+}
+
+/* ── Form Fields ───────────────────────────────── */
+.field-group{margin-bottom:1.5rem}
+.field-label{
+  display:block;font-size:.7rem;font-weight:700;
+  letter-spacing:3px;color:var(--crimson);
+  margin-bottom:.5rem;
+  font-family:monospace;
+}
+.field-wrap{position:relative}
+.field-input{
+  width:100%;padding:.85rem 1rem;
+  background:rgba(30,30,42,.6);
+  border:1px solid var(--border);
+  color:var(--text-primary);
+  font-family:var(--font-body);font-size:.95rem;
+  outline:none;
+  clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);
+  transition:border-color var(--transition),background var(--transition);
+}
+.field-input::placeholder{color:var(--text-dim);font-size:.85rem}
+.field-input:focus{
+  border-color:var(--crimson);
+  background:rgba(201,36,63,.05);
+}
+.field-ink{
+  position:absolute;bottom:-2px;left:0;width:0;height:2px;
+  background:linear-gradient(90deg,var(--crimson),var(--cyan));
+  transition:width .4s ease;
+}
+.field-input:focus ~ .field-ink{width:100%}
+
+.field-select{
+  cursor:pointer;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8a9a' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 1rem center;
+  padding-right:2.5rem;
+}
+.field-select option{
+  background:var(--bg-card);color:var(--text-primary);
+}
+
+/* ── Error ─────────────────────────────────────── */
+.auth-error{
+  font-size:.82rem;color:var(--crimson-glow);
+  min-height:1.2rem;margin-bottom:.8rem;
+  opacity:0;transform:translateY(-5px);
+  transition:opacity .3s,transform .3s;
+  font-weight:500;
+}
+.auth-error.visible{opacity:1;transform:translateY(0)}
+
+/* ── Submit Button ─────────────────────────────── */
+.auth-submit{
+  width:100%;padding:1rem;
+  background:var(--crimson);color:#fff;
+  border:none;cursor:pointer;
+  font-family:var(--font-body);font-size:.9rem;font-weight:700;
+  letter-spacing:3px;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:.5rem;
+  clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);
+  transition:background var(--transition),transform var(--transition),box-shadow var(--transition);
+}
+.auth-submit:hover{
+  background:var(--crimson-glow);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(201,36,63,.3);
+}
+.auth-submit:active{transform:translateY(0)}
+.submit-arrow{
+  font-size:1.2rem;
+  transition:transform .3s;
+}
+.auth-submit:hover .submit-arrow{transform:translateX(4px)}
+
+/* ── Switch Prompt ─────────────────────────────── */
+.auth-switch{
+  text-align:center;margin-top:1.5rem;
+  font-size:.82rem;color:var(--text-dim);
+}
+.switch-btn{
+  background:none;border:none;color:var(--cyan);
+  cursor:pointer;font-weight:600;font-size:.82rem;
+  font-family:var(--font-body);
+  transition:color var(--transition);
+}
+.switch-btn:hover{color:var(--crimson-glow)}
+
+/* ── Back Link ─────────────────────────────────── */
+.back-link{
+  margin-top:2rem;font-size:.82rem;color:var(--text-dim);
+  transition:color var(--transition);letter-spacing:1px;
+}
+.back-link:hover{color:var(--cyan)}
+
+/* ── City slide-in ─────────────────────────────── */
+.field-city{
+  animation:fieldSlide .4s ease both;
+}
+@keyframes fieldSlide{
+  from{opacity:0;transform:translateY(-10px);max-height:0}
+  to{opacity:1;transform:translateY(0);max-height:120px}
+}
+
+/* ── Responsive ────────────────────────────────── */
+@media(max-width:480px){
+  .auth-card{padding:0 1.5rem 1.5rem;max-width:100%}
+  .card-accent-top{margin:0 -1.5rem;margin-bottom:1.5rem}
+  .bg-deco-text{font-size:4rem}
+}

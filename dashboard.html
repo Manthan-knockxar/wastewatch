@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WasteWatch — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+
+  <!-- Noise overlay -->
+  <div class="bg-noise"></div>
+
+  <!-- ═══════════════ NAVBAR ═══════════════ -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <span class="brand-icon">♻</span>
+        <span class="brand-text">WASTE<span class="accent">WATCH</span></span>
+      </a>
+      <div class="nav-user">
+        <span class="user-city" id="user-city"></span>
+        <span class="user-name" id="user-name"></span>
+        <button class="btn-logout" id="btn-logout">LOGOUT</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════ DASHBOARD HEADER ═══════════════ -->
+  <header class="dash-header">
+    <div class="dash-header-bg-text" aria-hidden="true">DASHBOARD</div>
+    <h1 class="dash-title">Your <span class="accent">Command Center</span></h1>
+    <p class="dash-subtitle">Track your impact, uphold your pledges, and explore your city's waste data.</p>
+  </header>
+
+  <!-- ═══════════════ TAB NAV ═══════════════ -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="tracker">
+      <span class="tab-num">01</span>
+      <span class="tab-label">WASTE TRACKER</span>
+    </button>
+    <button class="tab-btn" data-tab="pledges">
+      <span class="tab-num">02</span>
+      <span class="tab-label">PLEDGES</span>
+    </button>
+    <button class="tab-btn" data-tab="city">
+      <span class="tab-num">03</span>
+      <span class="tab-label">YOUR CITY</span>
+    </button>
+  </div>
+
+  <!-- ═══════════════ TAB CONTENT ═══════════════ -->
+  <main class="dash-main">
+
+    <!-- ── TAB 1: WASTE TRACKER ─────────────────── -->
+    <section class="tab-panel active" id="panel-tracker">
+      <div class="tracker-layout">
+
+        <!-- Log Form -->
+        <div class="tracker-form-card">
+          <div class="card-accent-bar"></div>
+          <h2 class="card-heading">Log an Order</h2>
+          <form id="tracker-form">
+            <div class="form-row">
+              <div class="form-field">
+                <label class="form-label" for="log-date">DATE</label>
+                <input type="date" id="log-date" class="form-input" required />
+              </div>
+              <div class="form-field">
+                <label class="form-label" for="log-orders">ORDERS</label>
+                <input type="number" id="log-orders" class="form-input" min="1" max="20" value="1" required />
+              </div>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="log-packaging">PACKAGING TYPE</label>
+              <select id="log-packaging" class="form-input form-select">
+                <option value="plastic">Plastic (150g avg)</option>
+                <option value="mixed">Mixed (120g avg)</option>
+                <option value="paper">Paper/Cardboard (100g avg)</option>
+                <option value="biodegradable">Biodegradable (80g avg)</option>
+              </select>
+            </div>
+            <button type="submit" class="form-submit">
+              <span>ADD ENTRY</span>
+              <span class="submit-plus">+</span>
+            </button>
+          </form>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="tracker-stats">
+          <div class="stat-card">
+            <span class="stat-icon">📦</span>
+            <span class="stat-val" id="stat-total-orders">0</span>
+            <span class="stat-lbl">Total Orders</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">🗑️</span>
+            <span class="stat-val" id="stat-total-waste">0 kg</span>
+            <span class="stat-lbl">Total Waste</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">📊</span>
+            <span class="stat-val" id="stat-avg-waste">0 g</span>
+            <span class="stat-lbl">Avg / Order</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-icon">📅</span>
+            <span class="stat-val" id="stat-this-month">0</span>
+            <span class="stat-lbl">This Month</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart -->
+      <div class="tracker-chart-card">
+        <h3 class="chart-heading">Your Waste Over Time</h3>
+        <div class="chart-container">
+          <canvas id="tracker-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- History Table -->
+      <div class="tracker-history-card">
+        <h3 class="chart-heading">Order History</h3>
+        <div class="table-wrap">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Orders</th>
+                <th>Packaging</th>
+                <th>Waste</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="history-body">
+              <tr class="empty-row"><td colspan="5">No entries yet. Log your first order above!</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB 2: PLEDGES ───────────────────────── -->
+    <section class="tab-panel" id="panel-pledges">
+      <div class="pledge-header">
+        <div class="pledge-impact-card">
+          <span class="impact-label">YOUR TOTAL IMPACT</span>
+          <span class="impact-value" id="pledge-impact">—</span>
+          <span class="impact-sub">estimated waste prevented</span>
+        </div>
+      </div>
+
+      <div class="pledge-grid" id="pledge-grid">
+        <!-- Pledge cards injected by JS -->
+      </div>
+    </section>
+
+    <!-- ── TAB 3: YOUR CITY ─────────────────────── -->
+    <section class="tab-panel" id="panel-city">
+      <div class="city-hero" id="city-hero">
+        <div class="city-rank-badge" id="city-rank-badge">S</div>
+        <h2 class="city-name" id="city-name-display">—</h2>
+        <p class="city-tagline" id="city-tagline">Loading city data...</p>
+      </div>
+
+      <div class="city-stats-grid">
+        <div class="city-stat-card">
+          <span class="cstat-label">Population</span>
+          <span class="cstat-value" id="cstat-pop">—</span>
+          <span class="cstat-unit">million</span>
+        </div>
+        <div class="city-stat-card">
+          <span class="cstat-label">Waste/Capita</span>
+          <span class="cstat-value" id="cstat-waste">—</span>
+          <span class="cstat-unit">kg/year</span>
+        </div>
+        <div class="city-stat-card">
+          <span class="cstat-label">Recycling Rate</span>
+          <span class="cstat-value" id="cstat-recycle">—</span>
+          <span class="cstat-unit">%</span>
+        </div>
+      </div>
+
+      <!-- City programs -->
+      <div class="city-section">
+        <h3 class="city-section-title">Active Programs</h3>
+        <div class="city-programs" id="city-programs"></div>
+      </div>
+
+      <!-- Local orgs -->
+      <div class="city-section">
+        <h3 class="city-section-title">Local Organizations</h3>
+        <div class="city-orgs" id="city-orgs"></div>
+      </div>
+
+      <!-- All cities ranking -->
+      <div class="city-section">
+        <h3 class="city-section-title">City Rankings</h3>
+        <p class="city-section-sub">Food delivery waste management performance across India's top 10 cities.</p>
+        <div class="city-rankings" id="city-rankings"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script src="auth.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WasteWatch — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+  <!-- Background layers -->
+  <div class="bg-image"></div>
+  <div class="bg-overlay"></div>
+  <div class="bg-noise"></div>
+  <div class="bg-scanlines"></div>
+
+  <!-- Decorative background text -->
+  <div class="bg-deco-text" aria-hidden="true">AUTHENTICATION</div>
+  <div class="bg-deco-text bg-deco-text-2" aria-hidden="true">VERIFY</div>
+
+  <!-- Ink splatter decorations -->
+  <div class="ink-splat ink-splat-1"></div>
+  <div class="ink-splat ink-splat-2"></div>
+
+  <!-- Main content -->
+  <main class="login-main">
+    <!-- Brand -->
+    <a href="index.html" class="login-brand">
+      <span class="brand-icon">♻</span>
+      <span class="brand-text">WASTE<span class="accent">WATCH</span></span>
+    </a>
+
+    <!-- Auth Card -->
+    <div class="auth-card">
+      <div class="card-accent-top"></div>
+
+      <!-- Tab Toggle -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login" data-mode="login">
+          <span class="tab-slash">//</span> LOGIN
+        </button>
+        <button class="auth-tab" id="tab-register" data-mode="register">
+          <span class="tab-slash">//</span> REGISTER
+        </button>
+      </div>
+
+      <!-- Form -->
+      <form id="auth-form" autocomplete="off">
+        <div class="field-group">
+          <label class="field-label" for="input-username">USER_ID</label>
+          <div class="field-wrap">
+            <input type="text" id="input-username" class="field-input" placeholder="Enter username" required minlength="3" />
+            <div class="field-ink"></div>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="input-password">PASS_KEY</label>
+          <div class="field-wrap">
+            <input type="password" id="input-password" class="field-input" placeholder="Enter password" required minlength="4" />
+            <div class="field-ink"></div>
+          </div>
+        </div>
+
+        <!-- City (register only) -->
+        <div class="field-group field-city" id="field-city" style="display:none">
+          <label class="field-label" for="input-city">LOCATION</label>
+          <div class="field-wrap">
+            <select id="input-city" class="field-input field-select">
+              <option value="" disabled selected>Select your city</option>
+            </select>
+            <div class="field-ink"></div>
+          </div>
+        </div>
+
+        <!-- Error display -->
+        <div class="auth-error" id="auth-error"></div>
+
+        <!-- Submit -->
+        <button type="submit" class="auth-submit" id="auth-submit">
+          <span class="submit-text" id="submit-text">ENTER</span>
+          <span class="submit-arrow">→</span>
+        </button>
+      </form>
+
+      <!-- Switch prompt -->
+      <p class="auth-switch" id="auth-switch">
+        No account? <button class="switch-btn" id="switch-btn">Register here</button>
+      </p>
+    </div>
+
+    <!-- Back link -->
+    <a href="index.html" class="back-link">← Back to WasteWatch</a>
+  </main>
+
+  <script src="auth.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Redirect if already logged in
+      if (AUTH.isLoggedIn()) {
+        window.location.href = 'dashboard.html';
+        return;
+      }
+
+      const form = document.getElementById('auth-form');
+      const tabLogin = document.getElementById('tab-login');
+      const tabRegister = document.getElementById('tab-register');
+      const fieldCity = document.getElementById('field-city');
+      const inputCity = document.getElementById('input-city');
+      const submitText = document.getElementById('submit-text');
+      const authError = document.getElementById('auth-error');
+      const switchText = document.getElementById('auth-switch');
+      const switchBtn = document.getElementById('switch-btn');
+
+      let mode = 'login';
+
+      // Populate cities
+      AUTH.CITIES.forEach(city => {
+        const opt = document.createElement('option');
+        opt.value = city;
+        opt.textContent = city;
+        inputCity.appendChild(opt);
+      });
+
+      function setMode(m) {
+        mode = m;
+        authError.textContent = '';
+        authError.classList.remove('visible');
+
+        if (m === 'login') {
+          tabLogin.classList.add('active');
+          tabRegister.classList.remove('active');
+          fieldCity.style.display = 'none';
+          submitText.textContent = 'ENTER';
+          switchText.innerHTML = 'No account? <button class="switch-btn" id="switch-btn">Register here</button>';
+        } else {
+          tabRegister.classList.add('active');
+          tabLogin.classList.remove('active');
+          fieldCity.style.display = 'block';
+          submitText.textContent = 'CREATE';
+          switchText.innerHTML = 'Have an account? <button class="switch-btn" id="switch-btn">Login here</button>';
+        }
+
+        // Rebind switch btn
+        document.getElementById('switch-btn').addEventListener('click', () => {
+          setMode(mode === 'login' ? 'register' : 'login');
+        });
+      }
+
+      tabLogin.addEventListener('click', () => setMode('login'));
+      tabRegister.addEventListener('click', () => setMode('register'));
+      switchBtn.addEventListener('click', () => setMode('register'));
+
+      function showError(msg) {
+        authError.textContent = msg;
+        authError.classList.add('visible');
+        // Shake the card
+        const card = document.querySelector('.auth-card');
+        card.classList.add('shake');
+        setTimeout(() => card.classList.remove('shake'), 500);
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('input-username').value.trim();
+        const password = document.getElementById('input-password').value;
+
+        if (mode === 'login') {
+          const res = await AUTH.login(username, password);
+          if (res.ok) {
+            document.querySelector('.auth-card').classList.add('success');
+            setTimeout(() => window.location.href = 'dashboard.html', 600);
+          } else {
+            showError(res.msg);
+          }
+        } else {
+          const city = inputCity.value;
+          if (!city) { showError('Please select a city.'); return; }
+          const res = await AUTH.register(username, password, city);
+          if (res.ok) {
+            // Auto-login after register
+            await AUTH.login(username, password);
+            document.querySelector('.auth-card').classList.add('success');
+            setTimeout(() => window.location.href = 'dashboard.html', 600);
+          } else {
+            showError(res.msg);
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

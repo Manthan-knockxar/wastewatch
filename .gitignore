@@ -1,0 +1,5 @@
+node_modules/
+.env
+wastewatch.db
+*.log
+.DS_Store
